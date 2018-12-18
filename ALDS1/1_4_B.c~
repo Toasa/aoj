@@ -1,0 +1,44 @@
+#include <stdio.h>
+
+int bi_search(int *S, int val, int min, int max) {
+  int med = (max - min) / 2 + min;
+  if (med < 0) {
+	return 0;
+  }
+  if (val == S[med] || val == S[min] || val == S[max]) {
+    return 1;
+  }
+  if (S[med] < val) {
+	min = med;
+	bi_search(S, val, min, max);
+  } else if (val < S[med]) {
+	max = med;
+	bi_search(S, val, min, max);
+  }
+  return 0;
+}
+
+int main() {
+
+
+  int n, q;
+  scanf("%d", &n);
+  int S[n];
+  for (int i = 0; i < n; i++) {
+	scanf("%d", S + i);
+  }
+
+  scanf("%d", &q);
+  int T[q];
+  int count = 0;
+  for (int i = 0; i < q; i++) {
+	scanf("%d", T + i);
+  }
+
+  for (int i = 0; i < q; i++) {
+	if (bi_search(S, T[i], 0, n - 1))
+	  count++;
+  }
+
+  printf("%d\n", count);
+}

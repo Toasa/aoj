@@ -1,0 +1,60 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct NODE {
+  int id;
+  int parent;
+  int sibling;
+  int degree;
+  int depth;
+  int height;
+  char type;
+  struct NODE *right;
+  struct NODE *left;
+} node;
+
+node *make_node(int id, int left, int right) {
+  node *p = malloc(sizeof(node));
+  p->id = id;
+  p->degree = 0;
+  p->left = malloc(sizeof(node));
+  p->right = malloc(sizeof(node));
+  p->left->id = left;
+  p->right->id = right;
+  if (left != -1)
+    p->degree++;
+  if (right != -1)
+    p->degree++;
+
+  return p;
+}
+
+int main() {
+  int n;
+  scanf("%d", &n);
+
+  node *tree[n];
+
+  int id;
+  int right;
+  int left;
+
+  for (int i = 0; i < n; i++) {
+    scanf("%d%d%d", &id, &left, &right);
+    node *p = make_node(id, left, right);
+    tree[id] = p;
+  }
+
+  // solve_child
+  for (int i = 0; i < n; i++) {
+    int id_l = tree[i]->left->id;
+    int id_r = tree[i]->right->id;
+    if (id_l != -1)
+      tree[i]->right = tree[id_l];
+    if (id_r != -1)
+      tree[i]->left = tree[id_r];
+  }
+
+  printf("%d\n", tree[0]->right->left->right->id);
+
+}

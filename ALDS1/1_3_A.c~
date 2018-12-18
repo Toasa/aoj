@@ -1,0 +1,10 @@
+#include <stdio.h>
+
+char *str;
+
+int main() {
+  scanf("%s", str);
+
+  int *stack;
+
+}

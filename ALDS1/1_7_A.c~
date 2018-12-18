@@ -1,0 +1,73 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+static int *c;
+
+typedef struct NODE {
+  int id;
+  int parent;
+  int depth;
+  // type: r, i, l (root, internal node, leaf)
+  char type;
+  int child_num;
+  struct NODE **childs;
+} node;
+
+void init(node *p) {
+  p->parent = -1;
+  p->depth = 0;
+  p->type = 'r';
+}
+
+node *make_node(int id, int k, int *c) {
+  node *p = malloc(sizeof(node));
+  p->id = id;
+  p->child_num = k;
+  p->childs = malloc(sizeof(node) * k);
+  for (int i = 0; i < k; i++) {
+    node *q = malloc(sizeof(node));
+    q->id = c[i];
+    p->childs[i] = q;
+  }
+  
+  return p;
+}
+
+void find_parent_depth_type(node *p, int n) {
+  int depth = n;
+  if (p->child_num != 0) {
+    depth++;
+    for (int i = 0; i < p->child_num; i++) {
+      p->childs[i]->depth = depth;
+      p->childs[i]->parent = p->id;
+    }
+    p->type = 'i';
+    find_parent_depth_type(p, depth);
+  } else {
+    p->type = 'l';
+  }
+}
+
+int main() {
+  int n;
+  scanf("%d", &n);
+  node *nodes[n];
+  
+  for (int i = 0; i < n; i++) {
+    // each node input
+    int id, k;
+    scanf("%d%d", &id, &k);
+
+    int c[k];
+    for (int j = 0; j < k; j++)
+      scanf("%d", c + j);
+    
+    node *p = make_node(id, k, c);
+    nodes[i] = p;
+  }
+
+  init(nodes[0]);
+
+  printf("root has %d childs\n", nodes[0]->child_num);
+  // find_parent_depth_type(nodes[0], 0);
+}

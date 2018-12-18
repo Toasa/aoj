@@ -1,0 +1,15 @@
+#include <cstdio>
+#include <cstdlib>
+
+
+using namespace std;
+
+typedef struct Node {
+  int val;
+  Node *prev, *next;
+} node;
+
+int main() {
+
+  return 0;
+}
