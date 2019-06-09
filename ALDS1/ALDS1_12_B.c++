@@ -39,16 +39,7 @@ void solve() {
             dst = nodes[src->adj_n[j]];
 
             // 最小コストの更新
-            //cout << "src: " << src->id << " dst: " << dst->id;
-            //cout << " dst's min cost: " << dst->min_cost << " src's cost to dst: " << src->min_cost + src->cost_to_n[j] << endl;
             dst->min_cost = min(dst->min_cost, src->min_cost + src->cost_to_n[j]);
-
-            // // dstの隣接nodeからsrcを消す処理
-            // auto itr = find(dst->adj_n.begin(), dst->adj_n.end(), src->id);
-            // int erase_index = itr - dst->adj_n.begin();
-            // dst->degree--;
-            // dst->adj_n.erase(dst->adj_n.begin() + erase_index);
-            // dst->cost_to_n.erase(dst->cost_to_n.begin() + erase_index);
         }
     }
 }
