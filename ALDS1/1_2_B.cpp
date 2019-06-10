@@ -13,7 +13,6 @@
 using namespace std;
 
 int main(){
-
     int n;
     cin >> n;
     int A[n];
@@ -23,22 +22,26 @@ int main(){
 
     int swap_count = 0;
     for (int i = 0; i < n; i++) {
-        for (int j = n - 1; i < j; j--) {
-            if (A[j] < A[j - 1]) {
-                int tmp = A[j];
-                A[j] = A[j - 1];
-                A[j - 1] = tmp;
-                swap_count++;
+        int mini = i;
+        for (int j = i + 1; j < n; j++) {
+            if (A[j] < A[mini]) {
+                mini = j;
             }
+        }
+        if (i != mini) {
+            swap_count++;
+            int tmp = A[i];
+            A[i] = A[mini];
+            A[mini] = tmp;
         }
     }
 
     for (int i = 0; i < n; i++) {
-        if (i != n - 1) {
-            cout << A[i] << " ";
-        } else {
+        if (i == n - 1) {
             cout << A[i] << endl;
-        }        
+        } else {
+            cout << A[i] << " ";
+        }
     }
     cout << swap_count << endl;
 
