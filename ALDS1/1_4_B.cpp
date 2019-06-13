@@ -22,12 +22,12 @@ void fillOutArr(int A[], int n) {
 }
 
 bool binarySearch(int A[], int t, int min_i, int max_i) {
-    if ((max_i - min_i == 1) && (A[max_i] != t && A[min_i] != t)) {
+    if ((max_i - min_i == 1) && A[max_i] != t && A[min_i] != t) {
         return false;
     }
 
     int mid_i = (min_i + max_i) / 2;
-    if (A[mid_i] == t || A[min_i] == t || A[max_i] == t) {
+    if (A[mid_i] == t) {
         return true;
     } else if (t < A[mid_i]) {
         return binarySearch(A, t, min_i, mid_i);

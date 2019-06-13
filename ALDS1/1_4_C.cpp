@@ -16,23 +16,6 @@
 
 using namespace std;
 
-// Your task is to write a program of a simple dictionary which implements the following instructions:
-
-// insert str: insert a string str in to the dictionary
-// find str: if the distionary contains str, then print 'yes', otherwise print 'no'
-
-// Input
-// In the first line n, the number of instructions is given. 
-// In the following n lines, n instructions are given in the above mentioned format.
-
-// Output
-// Print yes or no for each find instruction in a line.
-
-// Constraints
-// A string consists of 'A', 'C', 'G', or 'T'
-// 1 ≤ length of a string ≤ 12
-// n ≤ 1000000
-
 typedef struct Node {
     string str;
     struct Node *next;
@@ -41,6 +24,15 @@ typedef struct Node {
 // A C G T
 // 2 3 5 7
 int Weight[12] = {11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53};
+
+node *HashMap[3000];
+
+node *newNode(string str) {
+    node *n = new(node);
+    n->str = str;
+    n->next = NULL;
+    return n;
+}
 
 int calcHashVal(string str) {
     int val = 0;
@@ -58,18 +50,51 @@ int calcHashVal(string str) {
     return val;
 }
 
+void Insert(string str, int hv) {
+    node *n = newNode(str);
+    if (HashMap[hv] == NULL) {
+        HashMap[hv] = n;
+    } else {
+        node *head = HashMap[hv];
+        HashMap[hv] = n;
+        n->next = head;
+    }
+}
+
+void Find(string str, int hv) {
+    node *n = HashMap[hv];
+    while (n != NULL) {
+        if (n->str == str) {
+            cout << "yes" << endl;
+            return;
+        }
+        n = n->next;
+    }
+    cout << "no" << endl;
+}
+
+// Memory Limit Exceeded :-(
 int main(){
     int n; 
     cin >> n;
 
+    string insts[n];
+    string strs[n];
+    for (int i = 0; i < n; i++) {
+        cin >> insts[i] >> strs[i];
+    }
+
     string inst, str;
     for (int i = 0; i < n; i++) {
-        cin >> inst >> str;
+        inst = insts[i];
+        str = strs[i];
+
+        int hv = calcHashVal(str);
+
         if (inst == "insert") {
-            int hv = calcHashVal(str);
-            cout << hv << endl;
+            Insert(str, hv);
         } else {
-            
+            Find(str, hv);
         }
     }
 
