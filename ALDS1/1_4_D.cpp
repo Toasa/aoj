@@ -16,49 +16,52 @@
 
 using namespace std;
 
-// You are given n packages of wi kg from a belt conveyor in order (i=0,1,...n−1).
-// You should load all packages onto k trucks which have the common maximum load P.
-// Each truck can load consecutive packages (more than or equals to zero) 
-// from the belt conveyor unless the total weights of the packages in the sequence 
-// does not exceed the maximum load P.
+int W[100000];
+int n, k;
 
-// Write a program which reads n, k and wi, 
-// and reports the minimum value of the maximum load P to load all packages from the belt conveyor.
+// 最大積載量がPのトラックk台に、いくつ荷物をつめるか？
+int f(int P) {
+    int count = 0;
+    int pile_i = 0;
+    for (int track = 0; track < k; track++) {
+        int weight = 0;
 
-// Input
-// In the first line, two integers n and k are given separated by a space character. 
-// In the following n lines, wi are given respectively.
+        if (pile_i == n) {
+            return count;
+        }
 
-// Output
-// Print the minimum value of P in a line.
+        for (int i = pile_i; i < n; i++) {
+            if (weight + W[i] <= P) {
+                weight += W[i];
+                // pile_i = i;
+                count++;
+            } else {
+                weight = 0;
+                pile_i = i;
+                break;
+            }            
+        }
+    }
+    return count;
+}
 
-// Constraints
-// 1≤n≤100,000
-// 1≤k≤100,000
-// 1≤wi≤10,000
-
-int main(){
-
-    // 反例
-    // 10 4
-    // 5
-    // 3
-    // 2
-    // 1
-    // 1
-    // 6
-    // 3
-    // 4
-    // 5
-    // 7
-
-    int n, k;
+int main() {
     cin >> n >> k;
-
-    int W[n];
     for (int i = 0; i < n; i++) {
         cin >> W[i];
     }
+
+    cout << "----" << endl;
+    cout << "P = 7: " << f(7) << endl;
+    cout << "P = 8: " << f(8) << endl;
+    cout << "P = 9: " << f(9) << endl;
+    cout << "P = 10: " << f(10) << endl;
+    cout << "P = 11: " << f(11) << endl;
+    cout << "P = 12: " << f(12) << endl;
+    cout << "P = 16: " << f(16) << endl;
+    cout << "P = 20: " << f(20) << endl;
+    cout << "P = 25: " << f(25) << endl;
+    cout << "P = 28: " << f(28) << endl;
 
     return 0;
 }
