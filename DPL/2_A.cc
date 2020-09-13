@@ -1,6 +1,3 @@
-// 
-
-// g++ -std=c++11 abc145_c.cc && ./a.out 
 #include <algorithm>
 #include <bitset>
 #include <cmath>
@@ -8,6 +5,7 @@
 #include <iomanip>
 #include <ios>
 #include <iostream>
+#include <map>
 #include <numeric>
 #include <queue>
 #include <set>
@@ -20,27 +18,14 @@ using namespace std;
 using ll = long long;
 using P = pair<int,int>;
 
-
-int memo[50];
-int n;
-
-int fibo(int i) {
-    if (memo[i] != 0) { return memo[i]; }
-
-    int result = fibo(i - 1) + fibo(i - 2);
-    memo[i] = result;
-    return result;
-}
-
 int main() {
-    int i;
-    cin >> n;
+    int V_num, E_num, i, j, h;
+    cin >> V_num >> E_num;
+    int s[E_num];
+    int t[E_num];
+    int d[E_num];
+    rep(i, E_num) cin >> s[i] >> t[i] >> d[i];
 
-    rep(i, n) memo[i] = 0;
-    memo[0] = 1;
-    memo[1] = 1;
-
-    cout << fibo(n) << endl;
 
     return 0;
 }

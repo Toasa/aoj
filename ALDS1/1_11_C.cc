@@ -1,90 +1,74 @@
-#include <iostream>
-#include <iomanip>
-#include <math.h>
+#include <algorithm>
+#include <bitset>
 #include <cmath>
-#include <vector>
+#include <functional>
+#include <iomanip>
+#include <ios>
+#include <iostream>
+#include <numeric>
 #include <queue>
+#include <set>
 #include <stack>
+#include <string>
+#include <unordered_map>
+#include <vector>
+#define rep(i, n) for (int i = 0; i < (int)(n); i++)
 using namespace std;
+using ll = long long;
+using P = pair<int,int>;
 
-int n;
-vector <int> nodes[100];
-queue <int> que;
 
-bool visited[100];
-int minDis[100];
-
-void printMinDis();
+bool is_connected[150][150];
+int min_distance[150];
 
 void init() {
-    for (int i = 0; i < n; i++) {
-        visited[i] = false;
-        minDis[i] = -1;
+    int i, j;
+
+    rep(i, 150) {
+        min_distance[i] = 150;
     }
+    min_distance[0] = 0;
+    min_distance[1] = 0;
+    rep(i, 150) rep(j, 150) is_connected[i][j] = false;
 }
 
-void store() {
-    cin >> n;
-    int u, k;
-    for (int i = 0; i < n; i++) {
-        cin >> u >> k;
-        vector <int> v(k);
-
-        int id;
-        for (int j = 0; j < k; j++) {
-            cin >> id;
-            v[j] = id - 1;
+void solveDepth(int src_id, int cur_depth) {
+    int dst_id;
+    rep(dst_id, 150) {
+        if (is_connected[src_id][dst_id]) {
+            if (cur_depth + 1 < min_distance[dst_id]) {
+                min_distance[dst_id] = cur_depth + 1;
+                solveDepth(dst_id, cur_depth + 1);
+            }
         }
-        nodes[u - 1] = v;
-    }
-}
-
-void enque(int id) {
-    que.push(id);
-    visited[id] = true;
-}
-
-int Deque() {
-    int id = que.front();
-    que.pop();
-    return id;
-}
-
-vector <int> searchNonVisitedAdjs(int id) {
-    vector <int> adjs;
-    for (int i = 0; i < nodes[id].size(); i++) {
-        int adj = nodes[id][i];
-        if (!visited[adj]) {
-            adjs.push_back(adj);
-        }
-    }
-    return adjs;
-}
-
-void bfs() {
-    enque(0);
-    minDis[0] = 0;
-    while (!que.empty()) {
-        int node = Deque();
-        vector <int> adjs = searchNonVisitedAdjs(node);
-        for (int i = 0; i < adjs.size(); i++) {
-            enque(adjs[i]);
-            minDis[adjs[i]] = minDis[node] + 1;
-        }
-    }
-}
-
-void printMinDis() {
-    for (int i = 0; i < n; i++) {
-        cout << i + 1 << " " << minDis[i] << endl;
     }
 }
 
 int main() {
-    store();
+    int n, i, j, u, v, k;
+    cin >> n;
+
     init();
-    bfs();
-    printMinDis();
+
+    rep(i, n) {
+        cin >> u >> k;
+        rep(j, k) {
+            cin >> v;
+            is_connected[u][v] = true;
+        }
+    }
+
+    solveDepth(1, 0);
+
+    rep(i, n) {
+        cout << i + 1 << " ";
+        if (min_distance[i + 1] == 150) {
+            cout << -1 << endl;
+        } else {
+            cout << min_distance[i + 1] << endl;
+        }
+        
+    }
 
     return 0;
 }

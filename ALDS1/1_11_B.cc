@@ -1,137 +1,85 @@
-#include <iostream>
-#include <iomanip>
-#include <math.h>
+#include <algorithm>
+#include <bitset>
 #include <cmath>
+#include <functional>
+#include <iomanip>
+#include <ios>
+#include <iostream>
+#include <numeric>
+#include <queue>
+#include <set>
+#include <stack>
+#include <string>
+#include <unordered_map>
 #include <vector>
+#define rep(i, n) for (int i = 0; i < (int)(n); i++)
 using namespace std;
+using ll = long long;
+using P = pair<int,int>;
 
-int n, Time;
+int n, i, j, u, v, k;
+bool is_connected[150][150];
 
-// d[i]: node iを最初に発見したときの時刻
-int d[100];
-// f[i]: iの隣接リストを調べ終えた完了時刻
-int f[100];
-vector <int> nodes[100];
-
-int stack[100];
-// 先頭の一つ上、空の箇所を指す
-int stktop;
+// 最初に発見した時刻
+int d[150];
+// 隣接リストを調べ終えた時刻
+int f[150];
 
 void init() {
-    stktop = 0;
-    Time = 1;
-    for (int i = 0; i < 100; i++) {
+    rep(i, n + 1) rep(j, n + 1) is_connected[i][j] = false;
+    rep(i, n + 1) {
         d[i] = 0;
         f[i] = 0;
-        stack[i] = 0;
     }
+    d[1] = 1;
 }
 
-void store() {
-    cin >> n;
+// must handle infinite loop
+int walkDepthFirst(int src_id, int time) {
+    d[src_id] = time;
 
-    int u, k;
-    for (int i = 0; i < n; i++) {
-        cin >> u >> k;
-        vector <int> v(k);
-        for (int j = 0; j < k; j++) {
-            int adj;
-            cin >> adj;
-            v[j] = adj - 1;
-        }
-        nodes[u - 1] = v;
-    }
-}
-
-bool isVisited(int id) {
-    return d[id] != 0;
-}
-
-int mustVisitNextNode(int id) {
-    vector <int> nextNodes = nodes[id];
-    for (int i = 0; i < nextNodes.size(); i++) {        
-        if (!isVisited(nextNodes[i])) {
-            return nextNodes[i];
-        }
-    }
-    return -1;
-}
-
-bool exsistNotVisitNode() {
-    for (int i = 0; i < n; i++) {
-        if (d[i] == 0) {
-            return true;
-        }
-    }
-    return false;
-}
-
-int shouldVisitFirstNode() {
-    for (int i = 0; i < n; i++) {
-        if (d[i] == 0) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-void push(int id) {
-    d[id] = Time;
-    Time++;
-    stack[stktop] = id;
-    stktop++;
-}
-
-int top() {
-    if (stktop <= 0) {
-        return -1;
-    }
-    return stack[stktop - 1];
-}
-
-int pop() {
-    int id = stack[stktop - 1];
-    f[id] = Time;
-    Time++;
-    stktop--;
-    return id;
-}
-
-bool isEmpty() {
-    return (stktop <= 0);
-}
-
-void dfs() {
-    int node;
-
-    while (exsistNotVisitNode()) {
-        node = shouldVisitFirstNode();
-        push(node);
-        
-        while (!isEmpty()) {
-            node = top();
-            int next = mustVisitNextNode(node);
-            if (next != -1) {
-                push(next);
-            } else {
-                pop();
+    int dst_id;
+    rep(dst_id, n + 1) {
+        if (is_connected[src_id][dst_id]) {
+            // 未訪問
+            if (d[dst_id] == 0) {
+                time = walkDepthFirst(dst_id, time + 1);
             }
         }
     }
-}
 
-void printTimeStamp() {
-    for (int i = 0; i < n; i++) {
-        cout << i + 1 << " " << d[i] << " " << f[i] << endl;
-    }
+    time++;
+    f[src_id] = time;
+    return time;
 }
 
 int main() {
+    cin >> n;
     init();
-    store();
 
-    dfs();
+    rep(i, n) {
+        cin >> u >> k;
+        rep(j, k) {
+            cin >> v;
+            is_connected[u][v] = true;
+        }
+    }
 
-    printTimeStamp();
+    int time = 1;
+    int node = 1;
+
+    time = walkDepthFirst(node, time);
+
+    rep(i, n) {
+        int cur_node = i + 1;
+        if (d[cur_node] == 0) {
+            time = walkDepthFirst(cur_node, time + 1);
+        }
+    }
+
+    rep(i, n) {
+        cout << i + 1 << " " << d[i + 1] << " " << f[i + 1] << endl;
+    }
+
     return 0;
 }

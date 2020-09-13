@@ -1,39 +1,34 @@
-#include <iostream>
-#include <iomanip>
-#include <string>
-#include <vector>
-#include <list>
-#include <map>
 #include <algorithm>
-#define _USE_MATH_DEFINES
+#include <bitset>
 #include <cmath>
-
+#include <functional>
+#include <iomanip>
+#include <ios>
+#include <iostream>
+#include <numeric>
+#include <queue>
+#include <set>
+#include <stack>
+#include <string>
+#include <unordered_map>
+#include <vector>
+#define rep(i, n) for (int i = 0; i < (int)(n); i++)
 using namespace std;
+using ll = long long;
+using P = pair<int,int>;
 
 int main(){
-    int n, x, count;
-
-    while(true){
+    int n, x;
+    do {
         cin >> n >> x;
-        if(n==0 && x==0){
-            break;
+        int i;
+        rep(i, x) {
+            int c = i + 1;
+            // x - c
+            
         }
-        count = 0;
-        for(int i=1; i<=n-2; i++){
-            for(int j=i+1; j<=n-1; j++){
-                for(int h=j+1; h<=n; h++){
-                    if(i+j+h==x){
-                        count += 1;
-                    }
-                }
-            }
-        }
-        cout << count << endl;
-    }
 
-
-
-
+    } while(!(n == 0 && x == 0));
 
     return 0;
 }
